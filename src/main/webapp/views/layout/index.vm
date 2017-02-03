@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        <h1 class="page-header">$!{R.getMessage('zookeeper_web_view')}</h1>
+    </div>
+    <div class="row">
+        <table class="table table-striped row-fluid">
+           <caption class="list-group-item-success" style="padding-right: 6px; padding-left: 6px;"><strong>$!{R.getMessage('click_a_zookeeper_cluster')}</strong></caption>
+            <tbody>
+#foreach($entry in $envMap.entrySet())
+                <tr>
+                    <td><a href="$!{contextPath}/$!{entry.key}/data">$!{entry.key}</a></td>
+                    <td class="text-muted">$!{entry.value}</td>
+                </tr>
+#end
+           </tbody>
+        </table>
+    </div>
+</div>
+<span></span>

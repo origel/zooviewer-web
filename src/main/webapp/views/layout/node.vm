@@ -1,0 +1,164 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-md-4 sidebar">
+            <div class="panel panel-default">
+                <div class="panel-heading">$!{R.getMessage('tree')} - 
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" style="min-width:120px">
+                            $!{env}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+#foreach($entry in $envMap.entrySet())
+                                <li><a href="/$!{entry.key}/data">$!{entry.key}</a></li>
+#end
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-unstyled list-group">
+                        <li><a href="/$!{env}/data">/</a></li>
+#set($fullPath = "")
+#foreach($l in $levelList)
+#set($fullPath = $fullPath + "/" + $l)
+                            <li class="path_active">
+                                <a href="/$!{env}/data?path=${fullPath}">$l</a>
+                            </li>
+#end
+                        <li>----</li>
+#foreach($p in $childList)
+#if($!{path}=='/')
+<li>|-> <a href="/$!{env}/data?path=/${p}">$p</a></li>
+#else
+<li>|-> <a href="/$!{env}/data?path=$!{path}/${p}">$p</a></li>
+#end
+#end
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 main">
+            <div class="row">
+                <div class="input-group">
+                    <input type="text" id="path" class="form-control" placeholder="/" value="$!{path}" onkeydown="onGoEnter(event)">
+                    <input type="hidden" id="zk" name="zk" value="$!{env}">
+                    <span class="input-group-btn">
+                        <a class="btn btn-primary" type="button" href="#" onclick="onGo()">$!{R.getMessage('go')}</a>
+                    </span>
+                </div>
+            </div>
+            <p></p>
+            <div class="row placeholders">
+                <table class="table table-bordered small">
+                    <tbody>
+                    <tr>
+                      <td class="info">$!{R.getMessage('czxid')}</td><td >$!stat.czxid</td>
+                      <td class="info">$!{R.getMessage('mzxid')}</td><td >$!stat.mzxid</td>
+                      <td class="info">$!{R.getMessage('pzxid')}</td><td >$!stat.pzxid</td>
+                    </tr>
+                    <tr>
+                      <td class="info">$!{R.getMessage('ctime')}</td><td >$!V.formatx($!stat.ctime) ($!stat.ctime)</td>
+                      <td class="info">$!{R.getMessage('mtime')}</td><td >$!V.formatx($!stat.mtime) ($!stat.mtime)</td>
+                      <td class="info">$!{R.getMessage('dataLength')}</td><td >$!stat.dataLength</td>
+                    </tr>
+                    <tr>
+                      <td class="info">$!{R.getMessage('version')}</td><td >$!stat.version</td>
+                      <td class="info">$!{R.getMessage('cversion')}</td><td >$!stat.cversion</td>
+                      <td class="info">$!{R.getMessage('aversion')}</td><td >$!stat.aversion</td>
+                    </tr>
+                    <tr>
+                      <td class="info">$!{R.getMessage('ephemeralOwner')}</td><td >$!stat.ephemeralOwner</td>
+                      <td class="info">$!{R.getMessage('numChildren')}</td><td >$!stat.numChildren</td>
+                    </tr>
+                
+                </tbody></table>
+            </div>
+            <div class="row placeholders">
+		<form id="update-form" action="$!{contextPath}/update" method="post">
+		    <div class="row-fluid">
+            	        <ul class="list-inline list-group ">
+                            <li> <a id="delete-button" href="#" class="btn btn-danger" onclick="onDelete()">$!{R.getMessage('delete_current_node')}</a> </li>
+            	            <li> <a href="$!{contextPath}/createNode?env=${env}&path=$!{path}" class="btn btn-success">$!{R.getMessage('create_new_node')}</a> </li>
+            	            <!-- TODO: update current node-->
+            	            <li> <a id="update-button" href="#" class="btn btn-primary" onclick="onUpdate()">$!{R.getMessage('update_current_node')}</a>  </li>
+            	            <li> <label><input id="readable" type="checkbox" onchange="onEditable()"> $!{R.getMessage('editable')} </label></li>
+            	        </ul>
+            	    </div>
+		    <p></p>
+		    <div class="row-fluid">
+		        <textarea id="data" name="data" class="small">$!{data}</textarea>
+			    <input name="env" value="$!{env}" type="hidden" />
+			    <input name="path" value="$!{path}" type="hidden" />
+		    </div>
+		</form>
+        <form id="delete-form" action="${contextPath}/delete" method="post">
+			    <input name="env" value="$!{env}" type="hidden" />
+			    <input name="path" value="$!{path}" type="hidden" />
+        </form>
+            </div>
+        </div>
+    </div>
+</div>
+    <style type="text/css">
+        .CodeMirror {
+            border: 1px solid #eee;
+            height: auto;
+        }
+        .path_active {
+            background-color:  #d9edf7;
+        }
+    </style>
+    <script src="$!{contextPath}/assets/codemirror/lib/codemirror.js"></script>
+    <script src="$!{contextPath}/assets/codemirror/mode/xml/xml.js"></script>
+    <script src="$!{contextPath}/assets/codemirror/mode/properties/properties.js"></script>
+    <script src="$!{contextPath}/assets/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("data"), {
+       lineNumbers: true,
+       readOnly: true,
+       theme: "zenburn",
+       mode: "htmlmixed"
+    });
+
+	function onEditable() {
+		var readOnly = $("#readable").is(":checked");
+		editor.options.readOnly = !readOnly;
+	}
+    function onUpdate() {
+        var disabled = $("#update-button").is(".disabled");
+
+        if (!disabled && confirm("$!{R.getMessage('confirm_update')}")) {
+            $("#update-form").submit();
+        }
+    }
+    function onDelete() {
+        var disabled = $("#delete-button").is(".disabled");
+        if (!disabled && confirm("$!{R.getMessage('confirm_delete')}")) {
+            $("#delete-form").submit();
+        }
+    }
+    function onShow() {
+        $("#show-form").submit();
+    }
+    function onShowEnter() {
+        if (event.keyCode == 13) {
+            $("#show-form").submit();
+        }
+    }
+    function onGoEnter(event) {
+        if (event.keyCode == 13) {
+            var path = $("#path").val();
+            var zk = $("#zk").val();
+            window.location.href="/" + zk + "/data/" + path;
+        }
+    }
+    function onGo() {
+        var path = $("#path").val();
+        var zk = $("#zk").val();
+        window.location.href="/" + zk + "/data?path=" + path;
+    }
+#if($error)
+alert('$!{R.getMessage($error)}');
+#end
+    </script>
+<span></span>

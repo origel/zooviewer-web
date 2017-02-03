@@ -1,0 +1,48 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zookeeper Web Viewer</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/stylesheets/main.css"/>
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/codemirror/lib/codemirror.css"/>
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/codemirror/theme/3024-day.css"/>
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/codemirror/theme/3024-night.css"/>
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/codemirror/theme/solarized.css"/>
+    <link rel="stylesheet" media="screen" href="$!{contextPath}/assets/codemirror/theme/zenburn.css"/>
+    <style type="text/css">
+        body { padding-top: 60px; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">$!{R.getMessage('zookeeper_web_view')}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+				<!--
+                <li><a href="#">User</a></li>
+                <li><a href="/logout">$!{R.getMessage('logout')}</a></li>
+				-->
+                <li><a href="/help">$!{R.getMessage('help')}</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+$screen_content
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">&copy $!{P.copyright}</p>
+  </div>
+</footer>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="$!{contextPath}/assets/javascripts/jquery.min.js"></script>
+<script src="$!{contextPath}/assets/javascripts/bootstrap.min.js"></script>
+</body>
+</html>

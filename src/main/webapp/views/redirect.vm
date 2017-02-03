@@ -1,0 +1,10 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="refresh" content="0;url=$!{contextPath}/$!{redirectUrl}">
+</head>
+<body>
+页面跳转中...  点击<a href="$!{redirectUrl}" target="_self">直接跳转</a>
+</body>
+</html>

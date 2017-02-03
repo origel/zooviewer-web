@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row">
+        <h2 class="page-header">$!{R.getMessage('introduction')}</h2>
+        <span>
+            $!{R.getMessage('help_introduction_body')}
+        </span>
+    </div>
+    <div class="row">
+        <h2 class="page-header">$!{R.getMessage('contact')}</h2>
+        $!{R.getMessage('help_contact_body')}
+    </div>
+    <div class="row">
+        <h2 class="page-header"></h2>
+    </div>
+</div>
+<span></span>

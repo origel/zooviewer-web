@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="row">
+        <h1 class="page-header">$!{R.getMessage('create_a_new_node')}</h1>
+        <h4>$!{R.getMessage('parent_path_is')} : <small>$!{path}</small></h4>
+    </div>
+    <div class="row">
+        <form action="${contextPath}/create" method="post">
+            <div class="form-group">
+                <label for="node_name">$!{R.getMessage('name')}</label>
+                <input type="text" class="form-control" id="node_name" name="name" placeholder="$!{R.getMessage('node_name')}" />
+            </div>
+
+			<input type="hidden" class="form-control" id="env" name="env" value="$!{env}"/>
+            <input type="hidden" name="parent" value="$!{path}">
+            <input class="btn btn-primary" type="submit" value="$!{R.getMessage('create')}">
+            <a class="btn btn-danger" role="button" href="/$!{env}/data">$!{R.getMessage('cancel')}</a>
+
+            <p></p>
+            <div class="row-fluid">
+                <textarea id="data" name="data" class="small"></textarea>
+            </div>
+        </form>
+    </div>
+</div>
+    <style type="text/css">
+        .CodeMirror {
+            border: 1px solid #eee;
+            height: auto;
+        }
+    </style>
+    <script src="$!{contextPath}/assets/codemirror/lib/codemirror.js"></script>
+    <script src="$!{contextPath}/assets/codemirror/mode/xml/xml.js"></script>
+    <script src="$!{contextPath}/assets/codemirror/mode/properties/properties.js"></script>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("data"), {
+           lineNumbers: true,
+           theme: "solarized dark",
+           mode: "properties"
+        });
+    </script>
+<span></span>
